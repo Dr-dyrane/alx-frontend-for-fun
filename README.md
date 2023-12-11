@@ -1,7 +1,3 @@
-Certainly! Below is a detailed README template for the Markdown to HTML conversion project. Feel free to modify it according to your preferences and add any additional information.
-
----
-
 # Markdown to HTML Converter
 
 ## Project Overview
@@ -33,7 +29,6 @@ This project aims to create a Markdown to HTML converter, allowing users to conv
 The project has the following structure:
 
 - `markdown2html.py`: The main script for converting Markdown to HTML.
-- `styles.css`: CSS file for styling the HTML output.
 - `README.md`: Project documentation in Markdown format.
 
 ## Requirements
@@ -92,7 +87,3 @@ If you would like to contribute to the project, please follow the guidelines out
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-Feel free to add more sections or details based on the specific needs of your project.
