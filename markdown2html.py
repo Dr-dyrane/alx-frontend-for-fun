@@ -44,8 +44,10 @@ def markdown_to_html(markdown_content):
 
     # Replace Markdown elements with corresponding HTML
     html_content = re.sub(heading_pattern, r'<h\1>\2</h\1>', markdown_content)
-    html_content = re.sub(ul_pattern, r'<ul>\n<li>\1</li>\n</ul>', html_content)
-    html_content = re.sub(ol_pattern, r'<ol>\n<li>\1</li>\n</ol>', html_content)
+    html_content = re.sub(
+        ul_pattern, r'<ul>\n<li>\1</li>\n</ul>', html_content)
+    html_content = re.sub(
+        ol_pattern, r'<ol>\n<li>\1</li>\n</ol>', html_content)
     html_content = re.sub(bold_pattern, r'<b>\1</b>', html_content)
 
     return html_content
@@ -54,7 +56,10 @@ def markdown_to_html(markdown_content):
 if __name__ == "__main__":
     # Check that the correct number of arguments were provided
     if len(sys.argv) != 3:
-        print("Usage: ./markdown2html.py <input_file> <output_file>", file=sys.stderr)
+        print(
+            "Usage: ./markdown2html.py <input_file> <output_file>",
+            file=sys.stderr
+        )
         sys.exit(1)
 
     # Get the input and output file names from the command-line arguments
@@ -66,4 +71,3 @@ if __name__ == "__main__":
 
     # Exit with a successful status code
     sys.exit(0)
-
