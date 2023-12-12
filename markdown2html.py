@@ -85,7 +85,7 @@ def markdown_to_html(markdown_content):
     # Regular expression for MD5 conversion
     md5_pattern = re.compile(r'\[\[(.+?)\]\]')
     # Regular expression for removing characters
-    remove_chars_pattern = re.compile(r'\(\((.+?)\)\)')
+    remove_chars_pattern = re.compile(r'\(\((.+?)\)\)', re.MULTILINE)
     # Regular expression for paragraph text
     # md_pattern = re.compile(r'^(.+?)$', re.MULTILINE)
 
@@ -104,7 +104,7 @@ def markdown_to_html(markdown_content):
         html_content = html_content.replace(f'[[{match}]]', hashed)
 
     # Remove characters as specified
-    html_content = re.sub(remove_chars_pattern, r'\1', html_content)
+    html_content = re.sub(remove_chars_pattern, convert_remove_chars, html_content)
 
     return html_content
 
@@ -171,6 +171,19 @@ def convert_md(match):
     #lines = 
     # text = 
     # return f""
+
+
+def convert_remove_chars(match):
+    """
+    Remove characters (in this case, the letter 'c') from the content.
+
+    Args:
+        match (re.Match): The regular expression match object.
+
+    Returns:
+        str: The content with specified characters removed.
+    """
+    return match.group(1).replace('c', '').replace('C', '')
 
 
 # Only execute if the script is run directly, not when imported
