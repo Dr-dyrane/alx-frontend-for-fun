@@ -87,7 +87,7 @@ def markdown_to_html(markdown_content):
     # Regular expression for removing characters
     remove_chars_pattern = re.compile(r'\(\((.+?)\)\)')
     # Regular expression for paragraph text
-    md_pattern = re.compile(r'^(.+?)$', re.MULTILINE)
+    # md_pattern = re.compile(r'^(.+?)$', re.MULTILINE)
 
     # Replace Markdown elements with corresponding HTML
     html_content = re.sub(heading_pattern, convert_heading, markdown_content)
@@ -168,9 +168,9 @@ def convert_md(match):
     Returns:
         str: The HTML paragraph tag.
     """
-    lines = match.group(1).strip().split('\n')
-    text = "<br />\n".join(line.strip() for line in lines)
-    return f"<p>\n{text}\n</p>"
+    #lines = 
+    # text = 
+    # return f""
 
 
 # Only execute if the script is run directly, not when imported
