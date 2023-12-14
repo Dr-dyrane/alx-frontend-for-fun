@@ -36,7 +36,7 @@ def convert_markdown_to_html(input_file, output_file):
         None
     """
     # Check the number of arguments
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         print(
             "Usage: ./markdown2html.py README.md README.html",
             file=sys.stderr)
@@ -61,6 +61,7 @@ def convert_markdown_to_html(input_file, output_file):
     # Write the HTML output to a file
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(html_content)
+
 
 def markdown_to_html(markdown_content):
     """
@@ -87,13 +88,13 @@ def markdown_to_html(markdown_content):
     # Regular expression for removing characters
     remove_chars_pattern = re.compile(r'\(\((.+?)\)\)', re.MULTILINE)
     # Regular expression for paragraph text
-    # md_pattern = re.compile(r'^(.+?)$', re.MULTILINE)
+    md_pattern = re.compile(r'(^|\n)([^\n]+?)(?=\n\n|\n*$)')
 
     # Replace Markdown elements with corresponding HTML
     html_content = re.sub(heading_pattern, convert_heading, markdown_content)
     html_content = re.sub(ul_pattern, convert_ul, html_content)
     html_content = re.sub(ol_pattern, convert_ol, html_content)
-    #html_content = re.sub(md_pattern, convert_md, html_content)
+    html_content = re.sub(md_pattern, convert_md, html_content)
     html_content = re.sub(bold_pattern, r'<b>\1</b>', html_content)
     html_content = re.sub(emphasis_pattern, r'<em>\1</em>', html_content)
 
@@ -107,6 +108,7 @@ def markdown_to_html(markdown_content):
     html_content = re.sub(remove_chars_pattern, convert_remove_chars, html_content)
 
     return html_content
+
 
 def convert_heading(match):
     """
@@ -168,9 +170,11 @@ def convert_md(match):
     Returns:
         str: The HTML paragraph tag.
     """
-    #lines = 
-    # text = 
-    # return f""
+    lines = match.group(2).split('\n')
+    if len(lines) == 2 and lines[1].strip():
+        return f'<p>{lines[0].strip()}<br/>{lines[1].strip()}</p>'
+    else:
+        return f'<p>{lines[0].strip()}</p>'
 
 
 def convert_remove_chars(match):
