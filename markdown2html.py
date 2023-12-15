@@ -15,189 +15,149 @@ Arguments:
 """
 
 import sys
-import os
+import os.path
 import re
 import hashlib
 
 
-def convert_markdown_to_html(input_file, output_file):
+def convert_line(line):
     """
-    Converts a Markdown file to HTML and writes the output to a file.
+    Converts a single line of Markdown to HTML.
+
+    Args:
+        line (str): The Markdown line to convert.
+
+    Returns:
+        str: The converted HTML line.
+    """
+    # Bold syntax markdown to html
+    line = line.replace('**', '<b>', 1)
+    line = line.replace('**', '</b>', 1)
+    line = line.replace('__', '<em>', 1)
+    line = line.replace('__', '</em>', 1)
+
+    # Md5
+    md5 = re.findall(r'\[\[.+?\]\]', line)
+    md5_inside = re.findall(r'\[\[(.+?)\]\]', line)
+    if md5:
+        line = line.replace(md5[0], hashlib.md5(
+            md5_inside[0].encode()).hexdigest())
+
+    # Removing the letter C
+    remove_letter_c = re.findall(r'\(\(.+?\)\)', line)
+    remove_c_more = re.findall(r'\(\((.+?)\)\)', line)
+    if remove_letter_c:
+        remove_c_more = ''.join(
+            c for c in remove_c_more[0] if c not in 'Cc')
+        line = line.replace(remove_letter_c[0], remove_c_more)
+
+    return line
+
+
+def process_line(line, html, unordered_start, ordered_start, paragraph):
+    """
+    Processes a single line of Markdown and writes the corresponding HTML.
+
+    Args:
+        line (str): The Markdown line to process.
+        html (file): The HTML file to write to.
+        unordered_start (bool): Indicates if an unordered list is open.
+        ordered_start (bool): Indicates if an ordered list is currently open.
+        paragraph (bool): Indicates if a paragraph is currently open.
+
+    Returns:
+        tuple: Updated values of unordered_start, ordered_start, and paragraph.
+    """
+    length = len(line)
+    headings = line.lstrip('#')
+    heading_num = length - len(headings)
+    unordered = line.lstrip('-')
+    unordered_num = length - len(unordered)
+    ordered = line.lstrip('*')
+    ordered_num = length - len(ordered)
+
+    # Headings and Lists
+    if 1 <= heading_num <= 6:
+        line = '<h{}>'.format(
+            heading_num) + headings.strip() + '</h{}>\n'.format(
+            heading_num)
+
+    if unordered_num:
+        if not unordered_start:
+            html.write('<ul>\n')
+            unordered_start = True
+        line = '<li>' + unordered.strip() + '</li>\n'
+    if unordered_start and not unordered_num:
+        html.write('</ul>\n')
+        unordered_start = False
+
+    if ordered_num:
+        if not ordered_start:
+            html.write('<ol>\n')
+            ordered_start = True
+        line = '<li>' + ordered.strip() + '</li>\n'
+    if ordered_start and not ordered_num:
+        html.write('</ol>\n')
+        ordered_start = False
+
+    if not (heading_num or unordered_start or ordered_start):
+        if not paragraph and length > 1:
+            html.write('<p>\n')
+            paragraph = True
+        elif length > 1:
+            html.write('<br/>\n')
+        elif paragraph:
+            html.write('</p>\n')
+            paragraph = False
+
+    if length > 1:
+        html.write(line)
+
+    return unordered_start, ordered_start, paragraph
+
+
+def process_markdown(input_file, output_file):
+    """
+    Converts a Markdown file to HTML.
 
     Args:
         input_file (str): The name of the Markdown file to convert.
         output_file (str): The name of the HTML file to create.
 
-    Raises:
-        SystemExit: If the number of arguments is less than 2 or
-        if the Markdown file is missing.
-
     Returns:
         None
     """
-    # Check the number of arguments
-    if len(sys.argv) < 3:
-        print(
-            "Usage: ./markdown2html.py README.md README.html",
-            file=sys.stderr)
-        sys.exit(1)
-
-    # Set default input and output files if not provided
-    input_file = sys.argv[1] if len(sys.argv) >= 2 else "README.md"
-    output_file = sys.argv[2] if len(sys.argv) >= 3 else "README.html"
-
     # Check that the Markdown file exists and is a file
-    if not (os.path.exists(input_file) and os.path.isfile(input_file)):
-        print(f"Missing {input_file}", file=sys.stderr)
-        sys.exit(1)
+    if not os.path.isfile(input_file):
+        print('Missing {}'.format(input_file), file=sys.stderr)
+        exit(1)
 
     # Read the Markdown file
-    with open(input_file, encoding="utf-8") as f:
-        markdown_content = f.read()
+    with open(input_file) as read:
+        with open(output_file, 'w') as html:
+            unordered_start, ordered_start, paragraph = False, False, False
+            # Process each line
+            for line in read:
+                line = convert_line(line)
+                unordered_start, ordered_start, paragraph = process_line(
+                    line, html, unordered_start, ordered_start, paragraph)
 
-    # Convert Markdown to HTML
-    html_content = markdown_to_html(markdown_content)
-
-    # Write the HTML output to a file
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(html_content)
-
-
-def markdown_to_html(markdown_content):
-    """
-    Convert Markdown to HTML using regular expressions.
-
-    Args:
-        markdown_content (str): The content of the Markdown file.
-
-    Returns:
-        str: The HTML content.
-    """
-    # Regular expression for headings (up to level 6)
-    heading_pattern = re.compile(r"^(#{1,6}) (.*)$", re.MULTILINE)
-    # Regular expression for unordered lists
-    ul_pattern = re.compile(r'^\s*-\s+([^\n]*(?:\n\s*-\s+[^\n]*)*)', re.MULTILINE)
-    # Regular expression for ordered lists
-    ol_pattern = re.compile(r'^\s*\*\s+([^\n]*(?:\n\s*\*\s+[^\n]*)*)', re.MULTILINE)
-    # Regular expression for bold text
-    bold_pattern = re.compile(r'\*\*(.+?)\*\*')
-    # Regular expression for emphasized text
-    emphasis_pattern = re.compile(r'__(.+?)__')
-    # Regular expression for MD5 conversion
-    md5_pattern = re.compile(r'\[\[(.+?)\]\]')
-    # Regular expression for removing characters
-    remove_chars_pattern = re.compile(r'\(\((.+?)\)\)', re.MULTILINE)
-    # Regular expression for paragraph text
-    md_pattern = re.compile(r'(^|\n)([^\n]+?)(?=\n\n|\n*$)')
-
-    # Replace Markdown elements with corresponding HTML
-    html_content = re.sub(heading_pattern, convert_heading, markdown_content)
-    html_content = re.sub(ul_pattern, convert_ul, html_content)
-    html_content = re.sub(ol_pattern, convert_ol, html_content)
-    html_content = re.sub(md_pattern, convert_md, html_content)
-    html_content = re.sub(bold_pattern, r'<b>\1</b>', html_content)
-    html_content = re.sub(emphasis_pattern, r'<em>\1</em>', html_content)
-
-    # Process MD5 conversion
-    matches = re.findall(md5_pattern, html_content)
-    for match in matches:
-        hashed = hashlib.md5(match.encode()).hexdigest()
-        html_content = html_content.replace(f'[[{match}]]', hashed)
-
-    # Remove characters as specified
-    html_content = re.sub(remove_chars_pattern, convert_remove_chars, html_content)
-
-    return html_content
+            if unordered_start:
+                html.write('</ul>\n')
+            if ordered_start:
+                html.write('</ol>\n')
+            if paragraph:
+                html.write('</p>\n')
 
 
-def convert_heading(match):
-    """
-    Converts heading matches to HTML tags.
+if __name__ == '__main__':
+    # Check the number of arguments
+    if len(sys.argv) < 3:
+        print('Usage: ./markdown2html.py README.md README.html',
+              file=sys.stderr)
+        exit(1)
 
-    Args:
-        match (re.Match): The regular expression match object.
-
-    Returns:
-        str: The HTML heading tag.
-    """
-    heading_level = len(match.group(1))
-    heading_text = match.group(2)
-    heading_tag = f"<h{heading_level}>{heading_text}</h{heading_level}>"
-    return heading_tag
-
-
-def convert_ul(match):
-    """
-    Converts unordered list matches to HTML tags.
-
-    Args:
-        match (re.Match): The regular expression match object.
-
-    Returns:
-        str: The HTML unordered list tag.
-    """
-    items = match.group(1).split('\n')
-    list_items = "\n".join(
-        f"<li>{item.strip('-').strip()}</li>" for item in items if item.strip())
-    ul_tag = f"<ul>\n{list_items}\n</ul>"
-    return ul_tag
-
-
-def convert_ol(match):
-    """
-    Converts ordered list matches to HTML tags.
-
-    Args:
-        match (re.Match): The regular expression match object.
-
-    Returns:
-        str: The HTML ordered list tag.
-    """
-    items = match.group(1).split('\n')
-    list_items = "\n".join(
-        f"<li>{item.strip('*').strip()}</li>" for item in items if item.strip())
-    ol_tag = f"<ol>\n{list_items}\n</ol>"
-    return ol_tag
-
-
-def convert_md(match):
-    """
-    Converts paragraph text matches to HTML tags.
-
-    Args:
-        match (re.Match): The regular expression match object.
-
-    Returns:
-        str: The HTML paragraph tag.
-    """
-    lines = match.group(2).split('\n')
-    if len(lines) == 2 and lines[1].strip():
-        return f'<p>{lines[0].strip()}<br/>{lines[1].strip()}</p>'
-    else:
-        return f'<p>{lines[0].strip()}</p>'
-
-
-def convert_remove_chars(match):
-    """
-    Remove characters (in this case, the letter 'c') from the content.
-
-    Args:
-        match (re.Match): The regular expression match object.
-
-    Returns:
-        str: The content with specified characters removed.
-    """
-    return match.group(1).replace('c', '').replace('C', '')
-
-
-# Only execute if the script is run directly, not when imported
-if __name__ == "__main__":
-    # Get the input and output file names from the command-line arguments
-    input_file = sys.argv[1] if len(sys.argv) >= 2 else "README.md"
-    output_file = sys.argv[2] if len(sys.argv) >= 3 else "README.html"
-
-    # Convert the Markdown file to HTML and write the output to a file
-    convert_markdown_to_html(input_file, output_file)
-
+    process_markdown(sys.argv[1], sys.argv[2])
+    
     # Exit with a successful status code
-    sys.exit(0)
+    exit(0)
