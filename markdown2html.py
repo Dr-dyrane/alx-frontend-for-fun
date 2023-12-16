@@ -20,6 +20,71 @@ import re
 import hashlib
 
 
+def convert_bold(line):
+    """
+    Converts bold syntax in Markdown to HTML.
+
+    Args:
+        line (str): The Markdown line to convert.
+
+    Returns:
+        str: The converted HTML line.
+    """
+    # Replace the first occurrence of '**' with '<b>'
+    line = line.replace('**', '<b>', 1)
+    # Replace the second occurrence of '**' with '</b>'
+    line = line.replace('**', '</b>', 1)
+    # Replace the first occurrence of '__' with '<em>'
+    line = line.replace('__', '<em>', 1)
+    # Replace the second occurrence of '__' with '</em>'
+    line = line.replace('__', '</em>', 1)
+
+    return line
+
+def convert_md5(line):
+    """
+    Converts MD5 syntax in Markdown to HTML.
+
+    Args:
+        line (str): The Markdown line to convert.
+
+    Returns:
+        str: The converted HTML line.
+    """
+    # Md5: Replace [[md5_text]] with the MD5 hash of md5_text
+    md5 = re.findall(r'\[\[.+?\]\]', line)
+    # Extract the content inside [[md5_text]] using capturing group
+    md5_text = re.findall(r'\[\[(.+?)\]\]', line)
+    # Check if there is any match for [[md5_text]]
+    if md5:
+        # Replace the first occurrence of [[md5_text]] with its MD5 hash
+        line = line.replace(md5[0], hashlib.md5(
+            md5_text[0].encode()).hexdigest())
+
+    return line
+
+def remove_letter_c(line):
+    """
+    Removes the letter 'C' or 'c' from ((text)) in Markdown.
+
+    Args:
+        line (str): The Markdown line to convert.
+
+    Returns:
+        str: The converted HTML line.
+    """
+    matches_c = re.findall(r'\(\(.+?\)\)', line)
+    removed_c_text = re.findall(r'\(\((.+?)\)\)', line)
+    if matches_c:
+        # Filter characters from the first match, excluding 'C' or 'c'
+        removed_c_text = ''.join(
+            char for char in removed_c_text[0] if char not in 'Cc'
+        )
+        # Replace ((text)) with text, removing 'C' or 'c'
+        line = line.replace(matches_c[0], removed_c_text)
+
+    return line
+
 def convert_line(line):
     """
     Converts a single line of Markdown to HTML.
@@ -31,34 +96,11 @@ def convert_line(line):
         str: The converted HTML line.
     """
     # Bold syntax markdown to html
-
-    # Replace the first occurrence of '**' with '<b>'
-    line = line.replace('**', '<b>', 1)
-    # Replace the second occurrence of '**' with '</b>'
-    line = line.replace('**', '</b>', 1)
-    # Replace the first occurrence of '__' with '<em>'
-    line = line.replace('__', '<em>', 1)
-    # Replace the second occurrence of '__' with '</em>'
-    line = line.replace('__', '</em>', 1)
-
+    line = convert_bold(line)
     # Md5: Replace [[md5_text]] with the MD5 hash of md5_text
-    md5 = re.findall(r'\[\[.+?\]\]', line)
-    # Extract the content inside [[md5_text]] using capturing group
-    md5_inside = re.findall(r'\[\[(.+?)\]\]', line)
-    # Check if there is any match for [[md5_text]]
-    if md5:
-        # Replace the first occurrence of [[md5_text]] with its MD5 hash
-        line = line.replace(md5[0], hashlib.md5(
-            md5_inside[0].encode()).hexdigest())
-
+    line = convert_md5(line)
     # Removing the letter C: Remove 'C' or 'c' from ((text))
-    remove_letter_c = re.findall(r'\(\(.+?\)\)', line)
-    remove_c_more = re.findall(r'\(\((.+?)\)\)', line)
-    if remove_letter_c:
-        remove_c_more = ''.join(
-            c for c in remove_c_more[0] if c not in 'Cc')
-        # Replace ((text)) with text, removing 'C' or 'c'
-        line = line.replace(remove_letter_c[0], remove_c_more)
+    line = remove_letter_c(line)
 
     return line
 
@@ -147,6 +189,59 @@ def process_line(line, html, unordered_start, ordered_start, paragraph):
     return unordered_start, ordered_start, paragraph
 
 
+def close_open_tags(html, unordered_start, ordered_start, paragraph):
+    """
+    Close any open unordered list, ordered list, or paragraph tags.
+
+    Args:
+        html (file): The HTML file to write to.
+        unordered_start (bool): Indicates if an unordered list is open.
+        ordered_start (bool): Indicates if an ordered list is currently open.
+        paragraph (bool): Indicates if a paragraph is currently open.
+
+    Returns:
+        None
+    """
+    # Close any open unordered list tag
+    if unordered_start:
+        html.write('</ul>\n')
+    # Close any open ordered list tag
+    if ordered_start:
+        html.write('</ol>\n')
+    # Close any open paragraph tag
+    if paragraph:
+        html.write('</p>\n')
+
+
+def convert_and_write_html(lines, output_file):
+    """
+    Converts and processes Markdown lines, then writes to the HTML file.
+
+    Args:
+        lines (iterable): Iterable containing Markdown lines.
+        output_file (str): The name of the HTML file to create.
+
+    Returns:
+        None
+    """
+    # Open the HTML file for writing
+    with open(output_file, 'w') as html:
+        # Initialize flags for tracking list and paragraph states
+        unordered_start, ordered_start, paragraph = False, False, False
+
+        # Process each line in the iterable
+        for line in lines:
+            # Convert the Markdown line to HTML
+            line = convert_line(line)
+            # Process the HTML line and update list and paragraph states
+            unordered_start, ordered_start, paragraph = process_line(
+                line, html, unordered_start, ordered_start, paragraph
+            )
+
+        # Call the helper function to close open tags
+        close_open_tags(html, unordered_start, ordered_start, paragraph)
+
+
 def process_markdown(input_file, output_file):
     """
     Converts a Markdown file to HTML.
@@ -165,29 +260,9 @@ def process_markdown(input_file, output_file):
         # exit with a status code of 1
         exit(1)
 
-    # Read the Markdown file
+    # Read the Markdown file and convert to html
     with open(input_file) as read:
-        # Open the HTML file for writing
-        with open(output_file, 'w') as html:
-            # Initialize flags for tracking list and paragraph states
-            unordered_start, ordered_start, paragraph = False, False, False
-
-            # Process each line in the Markdown file
-            for line in read:
-                # Convert the Markdown line to HTML
-                line = convert_line(line)
-                # Process the HTML line and update list and paragraph states
-                unordered_start, ordered_start, paragraph = process_line(
-                    line, html, unordered_start, ordered_start, paragraph)
-
-            # Close any open unordered list or ordered list tags
-            if unordered_start:
-                html.write('</ul>\n')
-            if ordered_start:
-                html.write('</ol>\n')
-            # Close any open paragraph tag
-            if paragraph:
-                html.write('</p>\n')
+        convert_and_write_html(read, output_file)
 
 
 # Check if the script is being run as the main program
