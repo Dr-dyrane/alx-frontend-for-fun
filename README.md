@@ -17,6 +17,7 @@ This project aims to create a Markdown to HTML converter, allowing users to conv
 - [Table of Contents](#table-of-contents)
 - [Project Structure](#project-structure)
 - [Requirements](#requirements)
+- [Tasks](#tasks)
 - [Usage](#usage)
   - [Script Execution](#script-execution)
   - [Markdown Syntax Supported](#markdown-syntax-supported)
@@ -39,6 +40,304 @@ The project has the following structure:
 - Executable files
 - Documented code
 - ...
+
+## Tasks
+
+### 0. Start a script
+
+Write a script `markdown2html.py` that takes two string arguments:
+
+- First argument: Name of the Markdown file
+- Second argument: Output file name
+
+**Requirements:**
+
+- If the number of arguments is less than 2, print in STDERR: "Usage: ./markdown2html.py README.md README.html" and exit 1.
+- If the Markdown file doesn’t exist, print in STDERR: "Missing <filename>" and exit 1.
+- Otherwise, print nothing and exit 0.
+
+**Example:**
+
+```bash
+$ ./markdown2html.py
+Usage: ./markdown2html.py README.md README.html
+$ ./markdown2html.py README.md README.html
+Missing README.md
+$ echo "Test" > README.md
+$ ./markdown2html.py README.md README.html
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 1. Headings
+
+Improve `markdown2html.py` by parsing Headings Markdown syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+# Heading level 1
+## Heading level 2
+### Heading level 3
+#### Heading level 4
+##### Heading level 5
+###### Heading level 6
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+## My title2
+# My title3
+#### My title4
+### My title5
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<h2>My title2</h2>
+<h1>My title3</h1>
+<h4>My title4</h4>
+<h3>My title5</h3>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 2. Unordered Listing
+
+Improve `markdown2html.py` by parsing Unordered Listing syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+- Hello
+- Bye
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+- Hello
+- Bye
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<ul>
+    <li>Hello</li>
+    <li>Bye</li>
+</ul>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 3. Ordered Listing
+
+Improve `markdown2html.py` by parsing Ordered Listing syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+* Hello
+* Bye
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+* Hello
+* Bye
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<ol>
+    <li>Hello</li>
+    <li>Bye</li>
+</ol>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 4. Simple Text
+
+Improve `markdown2html.py` by parsing paragraph syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+Hello
+
+I'm a text
+with 2 lines
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+- Hello
+- Bye
+
+Hello
+
+I'm a text
+with 2 lines
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<ul>
+    <li>Hello</li>
+    <li>Bye</li>
+</ul>
+<p>
+    Hello
+</p>
+<p>
+    I'm a text
+    <br />
+    with 2 lines
+</p>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 5. Bold and Emphasis Text
+
+Improve `markdown2html.py` by parsing bold syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+**Hello**
+__Hello__
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+- He**l**lo
+- Bye
+
+Hello
+
+I'm **a** text
+with __2 lines__
+
+**Or in bold**
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<ul>
+    <li>He<b>l</b>lo</li>
+    <li>Bye</li>
+</ul>
+<p>
+    Hello
+</p>
+<p>
+    I'm <b>a</b> text
+    <br/>
+    with <em>2 lines</em>
+</p>
+<p>
+    <b>Or in bold</b>
+</p>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-
+
+frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+
+### 6. ... but why??
+
+Improve `markdown2html.py` by parsing specific syntax for generating HTML.
+
+**Syntax:**
+
+```markdown
+[[Hello]]
+((Hello Chicago))
+```
+
+**Example:**
+
+```bash
+$ cat README.md
+# My title
+- He**l**lo
+- Bye
+
+Hello
+
+I'm **a** text
+with __2 lines__
+
+((I will live in Caracas))
+
+But it's [[private]]
+
+So cool!
+
+$ ./markdown2html.py README.md README.html
+$ cat README.html
+<h1>My title</h1>
+<ul>
+    <li>He<b>l</b>lo</li>
+    <li>Bye</li>
+</ul>
+<p>
+    Hello
+</p>
+<p>
+    I'm <b>a</b> text
+    <br/>
+    with <em>2 lines</em>
+</p>
+<p>
+    I will live in araas
+</p>
+<p>
+    But it's 2c17c6393771ee3048ae34d6b380c5ec
+</p>
+<p>
+    So cool!
+</p>
+```
+
+**Repo:**
+
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
 
 ## Usage
 
@@ -87,3 +386,7 @@ If you would like to contribute to the project, please follow the guidelines out
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+### Copyright
+
+Copyright © 2023 ALX, All rights reserved.
