@@ -69,8 +69,8 @@ $ ./markdown2html.py README.md README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 1. Headings
 
@@ -108,8 +108,8 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 2. Unordered Listing
 
@@ -141,8 +141,8 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 3. Ordered Listing
 
@@ -174,8 +174,8 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 4. Simple Text
 
@@ -222,8 +222,8 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 5. Bold and Emphasis Text
 
@@ -275,8 +275,8 @@ $ cat README.html
 
 - [GitHub Repository: alx-
 
-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 6. ... but why??
 
@@ -336,8 +336,8 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-frontend-for-fun](https://github.com/yourusername/alx-frontend-for-fun)
-- **File:** [markdown2html.py](https://github.com/yourusername/alx-frontend-for-fun/markdown2html.py)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ## Usage
 
