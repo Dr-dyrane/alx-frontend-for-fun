@@ -59,8 +59,11 @@ def convert_md5(line):
     # Check if there is any match for [[md5_text]]
     if md5:
         # Replace the first occurrence of [[md5_text]] with its MD5 hash
-        line = line.replace(md5[0], hashlib.md5(
-            md5_text[0].encode()).hexdigest())
+        line = line.replace(
+            md5[0], hashlib.md5(
+            md5_text[0].encode()
+            ).hexdigest()
+        )
 
     return line
 
@@ -144,8 +147,10 @@ def process_line(line, html, unordered_start, ordered_start, paragraph):
     if 1 <= heading_num <= 6:
         # Convert Markdown heading to HTML heading
         line = '<h{}>'.format(
-            heading_num) + headings.strip() + '</h{}>\n'.format(
-            heading_num)
+            heading_num
+            ) + headings.strip() + '</h{}>\n'.format(
+            heading_num
+        )
 
     if unordered_num:
         # Handle Markdown unordered list
