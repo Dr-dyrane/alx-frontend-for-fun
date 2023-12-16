@@ -41,6 +41,7 @@ def convert_bold(line):
 
     return line
 
+
 def convert_md5(line):
     """
     Converts MD5 syntax in Markdown to HTML.
@@ -63,6 +64,7 @@ def convert_md5(line):
 
     return line
 
+
 def remove_letter_c(line):
     """
     Removes the letter 'C' or 'c' from ((text)) in Markdown.
@@ -84,6 +86,7 @@ def remove_letter_c(line):
         line = line.replace(matches_c[0], removed_c_text)
 
     return line
+
 
 def convert_line(line):
     """
@@ -277,6 +280,6 @@ if __name__ == '__main__':
 
     # Call the process_markdown function with input and output file names
     process_markdown(sys.argv[1], sys.argv[2])
-    
+
     # Exit with a successful status code (0) to indicate successful execution
     exit(0)
