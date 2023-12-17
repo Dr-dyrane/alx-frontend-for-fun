@@ -269,8 +269,8 @@ def process_markdown(input_file, output_file):
         exit(1)
 
     # Read the Markdown file and convert to html
-    with open(input_file) as read:
-        convert_and_write_html(read, output_file)
+    with open(input_file) as readme:
+        convert_and_write_html(readme, output_file)
 
 
 # Check if the script is being run as the main program

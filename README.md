@@ -225,6 +225,8 @@ $ cat README.html
 - [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
 - **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
+Certainly! Let's update the task descriptions for Task 5 with a similar table format for better clarity:
+
 ### 5. Bold and Emphasis Text
 
 Improve `markdown2html.py` by parsing bold syntax for generating HTML.
@@ -235,6 +237,13 @@ Improve `markdown2html.py` by parsing bold syntax for generating HTML.
 **Hello**
 __Hello__
 ```
+
+**HTML Generation:**
+
+Markdown | HTML Generated
+---------|----------------
+`**Hello**` | `<b>Hello</b>`
+`__Hello__` | `<em>Hello</em>`
 
 **Example:**
 
@@ -273,9 +282,7 @@ $ cat README.html
 
 **Repo:**
 
-- [GitHub Repository: alx-
-
-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
+- [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
 - **File:** [markdown2html.py](https://github.com/Dr-dyrane/alx-frontend-for-fun/markdown2html.py)
 
 ### 6. ... but why??
@@ -288,6 +295,13 @@ Improve `markdown2html.py` by parsing specific syntax for generating HTML.
 [[Hello]]
 ((Hello Chicago))
 ```
+
+**HTML Generation and Description:**
+
+Markdown | HTML Generated | Description
+---------|----------------|-------------
+`[[Hello]]` | `8b1a9953c4611296a827abf8c47804d7` | Convert in MD5 (lowercase) the content
+`((Hello Chicago))` | `Hello hiago` | Remove all `c` (case-insensitive) from the content
 
 **Example:**
 
@@ -333,7 +347,6 @@ $ cat README.html
     So cool!
 </p>
 ```
-
 **Repo:**
 
 - [GitHub Repository: alx-frontend-for-fun](https://github.com/Dr-dyrane/alx-frontend-for-fun)
