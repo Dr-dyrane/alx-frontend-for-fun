@@ -1,6 +1,6 @@
 /* 103-sort_strings.scss */
 /* Sort! */
 
-@import '103-sort_list';
+$list_to_sort: john anna zoe kim felicia carrie;
 
-@debug $list_to_sort;
+@debug "Sorted list: #{sort($list_to_sort)}";
